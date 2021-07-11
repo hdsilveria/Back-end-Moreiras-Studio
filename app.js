@@ -221,7 +221,7 @@ app.delete("/deletarHorario", (req, res) => {
     })
 })
 
-app.get("/horarios", (req, res) => {
+app.get("/horarios", auth, (req, res) => {
     agenda.findAll({ order: [['data','DESC'],['horario','DESC']]}).then((horarios) => {
         return res.json(horarios)
 
