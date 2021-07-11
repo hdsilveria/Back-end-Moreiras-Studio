@@ -2,47 +2,60 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+
 const login = require('./config_user/auth')
 
 const sequelize = require('./bd/conect')
 const { Op } = require("sequelize");
 const estoque = require('./bd/estoque')
 const users = require('./bd/users')
+const agenda = require('./bd/agenda')
 
 const cors = require('cors')
 const auth = require('./config_user/auth')
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "X-PINGOTHER, Content-Type, Authorization")
     app.use(cors())
     next()
 })
 
-app.post("/login", (req, res) => {
-    users.findOne({ where: {[Op.and]:[{email: req.body.email, password: req.body.password}]} })
-    .then((user) => {
 
-    if (!user){
-        return res.status(401).json({message: "Erro ao autenticar!"})
+app.post("/login", async (req, res) => {
+
+  const user = await users.findOne({ where: [{email: req.body.email}] })
+
+    if(user === null){
+        return res.status(401).json({message_1: "Erro ao autenticar!"})
+    }        
+
+    if (!(await bcrypt.compare(req.body.password, user.password))){
+        console.log(user)
+        return res.status(401).json({message_2: "Erro ao autenticar!"})
     }
 
     const token = jwt.sign({
         id: user.id,
-        email: user.email
-    }, "system_estoque", {
-        expiresIn: 150
+        email: user.email,
+        perfil: user.perfil
+        }, 
+        "system_estoque", 
+        { 
+        expiresIn: 3000
     })
 
-    return res.status(200).json([
-        {Usuario: user.usuario}, 
-        {Email: user.email}, 
-        {Perfil: user.perfil}, 
-        {token: token}])
-        
-    })
+    return res.status(201).json({
+        Error: false,
+        Mensagem: "Usuario Autenticado",
+        Usuario: user.usuario,
+        Perfil: user.perfil, 
+        token})
+    
 })
 
-app.get("/estoque", (req, res) => {
+app.get("/estoque", auth, (req, res) => {
     estoque.findAll({}).then((estoque) => {
         return res.json(estoque)
 
@@ -57,7 +70,7 @@ app.get("/estoque", (req, res) => {
 })
 
 
-app.post("/inserirMaterial", (req, res) => {
+app.post("/inserirMaterial", auth, (req, res) => {
     estoque.create(req.body).then(() => {
 
         return res.status(200).json({
@@ -106,13 +119,16 @@ app.delete("/deletarMaterial", (req, res) => {
 
 
 
-app.post("/criarUser", (req, res) => {
-    users.create(req.body).then((user) => {
+app.post("/criarUser", auth, async (req, res) => {
+
+    dados = req.body;
+    dados.password = await bcrypt.hash(dados.password, 8)
+
+    users.create(dados).then(() => {
     
         return res.status(200).json({
             error: false,
-            message: "Usuario registrado com sucesso!",
-            usuario: user
+            message: "Usuario registrado com sucesso!"
         })
     
         }).catch(() => {
@@ -125,7 +141,8 @@ app.post("/criarUser", (req, res) => {
 })
 
 
-app.get("/usuarios", auth, (req, res) => {
+app.get("/usuarios", (req, res) => {
+
     users.findAll({}).then((usuario) => {
         return res.json(usuario)
 
@@ -152,6 +169,73 @@ app.get("/buscaUser", (req, res) => {
         })
     })
 })
+
+
+
+
+
+app.post("/inserirHorario", auth, (req, res) => {
+    agenda.create(req.body).then(() => {
+
+        return res.status(200).json({
+            error: false,
+            message: "Horario inserido!"})
+
+        }).catch(() => {
+
+        return res.status(400).json({
+            error: true,
+            message: "Horario não inserido"            
+        })
+    })
+})
+
+
+app.put("/alterarHorario", (req, res) => {
+    agenda.update( req.body, { where: { id: req.body.id}} ).then(() => {
+        return res.status(200).json({
+            error: false,
+            message: "Horario Atualizado!"})
+
+    }).catch(() => {
+
+        return res.status(400).json({
+            error: true,
+            message: "Horario não realizada!"
+        })
+    })
+})
+
+
+app.delete("/deletarHorario", (req, res) => {
+    agenda.destroy({where: {id: req.body.id}}).then(() => {
+        return res.status(200).json({
+            error: false,
+            message: "Horario Deletado!"})
+        }).catch(() => {
+  
+        return res.status(400).json({
+            error: true,
+            message: "Horario não Deletado"
+        })
+    })
+})
+
+app.get("/horarios", auth, (req, res) => {
+    agenda.findAll({ order: [['data','DESC'],['horario','DESC']]}).then((horarios) => {
+        return res.json(horarios)
+
+    }).catch((err) => {
+
+        console.log(err)
+        return res.status(400).json({
+            error: true,
+            message: "Busca não realizada!"
+        })
+    })
+})
+
+
 
 
 app.listen(3001, () => {

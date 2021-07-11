@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 
-const sequelize = new Sequelize("estoque", "root", "root123", {
-    host: 'localhost',
+const sequelize = new Sequelize("heroku_49ae44b7267e29e", "bb7dc15181b34c", "5572faf6", {
+    host: 'us-cdbr-east-04.cleardb.com',
     dialect: 'mysql',
     PORT: 3306
   })
