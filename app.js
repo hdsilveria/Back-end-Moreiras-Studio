@@ -41,7 +41,7 @@ app.post("/login", async (req, res) => {
         email: user.email,
         perfil: user.perfil
         }, 
-        "system_estoque", 
+        "849bb516b4e697812ce52e293435bc9b", 
         { 
         expiresIn: 3000
     })
