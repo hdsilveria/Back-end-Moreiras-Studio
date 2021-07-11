@@ -221,7 +221,7 @@ app.delete("/deletarHorario", (req, res) => {
     })
 })
 
-app.get("/horarios", auth, (req, res) => {
+app.get("/horarios", (req, res) => {
     agenda.findAll({ order: [['data','DESC'],['horario','DESC']]}).then((horarios) => {
         return res.json(horarios)
 
@@ -238,6 +238,5 @@ app.get("/horarios", auth, (req, res) => {
 
 
 
-app.listen(3001, () => {
-    console.log("Servidor em Produção!")
-})
+var port = process.env.PORT || 5000
+app.listen(port)
