@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
 
     try {
         
-        const decode = jwt.verify(token, 'system_estoque')
+        const decode = jwt.verify(token, '849bb516b4e697812ce52e293435bc9b')
         console.log(decode)
         next()
 

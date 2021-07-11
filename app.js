@@ -141,7 +141,7 @@ app.post("/criarUser", auth, async (req, res) => {
 })
 
 
-app.get("/usuarios", (req, res) => {
+app.get("/usuarios", auth, (req, res) => {
 
     users.findAll({}).then((usuario) => {
         return res.json(usuario)
@@ -156,7 +156,7 @@ app.get("/usuarios", (req, res) => {
     })
 })
 
-app.get("/buscaUser", (req, res) => {
+app.get("/buscaUser", auth, (req, res) => {
     users.findOne({ where: {[Op.and]:[{email: req.body.email, password: req.body.password}]} }).then((user) => {
         return res.json([user.email, user.usuario, user.perfil])
 
@@ -191,7 +191,7 @@ app.post("/inserirHorario", auth, (req, res) => {
 })
 
 
-app.put("/alterarHorario", (req, res) => {
+app.put("/alterarHorario", auth, (req, res) => {
     agenda.update( req.body, { where: { id: req.body.id}} ).then(() => {
         return res.status(200).json({
             error: false,
@@ -207,7 +207,7 @@ app.put("/alterarHorario", (req, res) => {
 })
 
 
-app.delete("/deletarHorario", (req, res) => {
+app.delete("/deletarHorario", auth, (req, res) => {
     agenda.destroy({where: {id: req.body.id}}).then(() => {
         return res.status(200).json({
             error: false,
