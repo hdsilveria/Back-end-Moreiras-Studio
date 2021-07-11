@@ -55,6 +55,8 @@ app.post("/login", async (req, res) => {
     
 })
 
+//estoque
+
 app.get("/estoque", auth, (req, res) => {
     estoque.findAll({}).then((estoque) => {
         return res.json(estoque)
@@ -118,6 +120,7 @@ app.delete("/deletarMaterial", (req, res) => {
 })
 
 
+//usuarios
 
 app.post("/criarUser", auth, async (req, res) => {
 
@@ -136,6 +139,21 @@ app.post("/criarUser", auth, async (req, res) => {
         return res.status(400).json({
             error: true,
             message: "Erro interno!"            
+        })
+    })
+})
+
+
+app.delete("/deleteUser", (req, res) => {
+    users.destroy({where: {id: req.body.id}}).then(() => {
+        return res.status(200).json({
+            error: false,
+            message: "Usuario Deletado!"})
+        }).catch(() => {
+  
+        return res.status(400).json({
+            error: true,
+            message: "Usuario não Deletado"
         })
     })
 })
@@ -171,8 +189,7 @@ app.get("/buscaUser", auth, (req, res) => {
 })
 
 
-
-
+//materiais
 
 app.post("/inserirHorario", auth, (req, res) => {
     agenda.create(req.body).then(() => {
