@@ -189,7 +189,7 @@ app.get("/buscaUser", auth, (req, res) => {
 })
 
 
-//materiais
+//Horario
 
 app.post("/inserirHorario", auth, (req, res) => {
     agenda.create(req.body).then(() => {
