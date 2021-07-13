@@ -224,7 +224,7 @@ app.put("/alterarHorario", auth, (req, res) => {
 })
 
 
-app.delete("/deletarHorario", auth, (req, res) => {
+app.delete("/deletarHorario", (req, res) => {
     agenda.destroy({where: {id: req.body.id}}).then(() => {
         return res.status(200).json({
             error: false,
