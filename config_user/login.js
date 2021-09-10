@@ -5,13 +5,6 @@ const bcrypt = require('bcryptjs')
 const users = require('../bd/users')
 const app = express()
 
-const cors = require('cors')
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "X-PINGOTHER, Content-Type, Authorization")
-  app.use(cors())
-  next()
-})
 
 router.post("/", async (req, res) => {
 
