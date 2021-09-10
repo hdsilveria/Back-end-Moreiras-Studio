@@ -3,6 +3,7 @@ const router = express.Router()
 const users = require('../bd/users')
 const { Op } = require("sequelize")
 const app = express()
+const bcrypt = require('bcryptjs')
 
 router.post("/createUser", async (req, res) => {
 
