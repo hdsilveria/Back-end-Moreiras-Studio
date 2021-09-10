@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 app.use(express.json())
-const auth = require('./config_user/auth')
 
 const estoque = require('./router/estoque')
 const agenda = require('./router/agenda')
@@ -9,6 +8,7 @@ const users = require('./router/users')
 const login = require('./config_user/login')
 
 const cors = require('cors')
+const auth = require('./config_user/auth')
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
