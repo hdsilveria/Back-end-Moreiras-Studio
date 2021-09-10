@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
 app.use('/estoque', estoque, auth)
 app.use('/agenda', agenda, auth)
-app.use('/users', users, auth)
+app.use('/users', users)
 app.use('/login', login)
 
 
