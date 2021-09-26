@@ -11,7 +11,6 @@ const cors = require('cors')
 const auth = require('./config_user/auth')
 
 app.use((req, res, next) => {
-    console.log("acessou o middleware!")
     res.header("Access-Control-Allow-Origin", "*")
     res.header("Access-Control-Allow-Methods", "*")
     res.header("Access-Control-Allow-Headers", "X-PINGOTHER, Content-Type, Authorization")
