@@ -3,9 +3,10 @@ const router = express.Router()
 const agenda = require('../bd/agenda')
 
 router.post("/horario", (req, res) => {
-  agenda.create(req.body).then(() => {
+  agenda.create(req.body).then(response => {
     return res.status(200).json({
       error: false,
+      id: response.id,
       message: "Horario inserido!"})
     }).catch(() => {
     return res.status(400).json({
