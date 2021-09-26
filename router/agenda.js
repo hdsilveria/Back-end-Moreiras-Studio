@@ -48,9 +48,17 @@ router.delete("/horario", (req, res) => {
 })
 
 router.get("/", (req, res) => {
-  agenda.findAndCountAll({ order: [['data','DESC'],['horario','DESC']]})
+  agenda.findAndCountAll({ 
+    offset: req.body.page,
+    limit: req.body.length,
+    order: [['data','DESC'],['horario','DESC']],
+  })
   .then((horarios) => {
-    return res.json(horarios)
+    return res.json({
+      page: req.body.page,
+      rows: req.body.length,
+      data: horarios,
+    })
   })
   .catch(() => {
     return res.status(400).json({
