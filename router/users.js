@@ -45,7 +45,6 @@ router.get("/", (req, res) => {
   users.findAndCountAll({})
   .then((users) => {
     var allUsers = []
-    console.log(users.rows)
     users.rows.map(arr => allUsers.push(
       { 
         id: arr.id,
@@ -57,7 +56,6 @@ router.get("/", (req, res) => {
     return res.json(allUsers)
   })
   .catch((err) => {
-    console.log(err)
     return res.status(400).json({
         error: true,
         message: "Busca não realizada!"
