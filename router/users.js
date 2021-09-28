@@ -26,8 +26,8 @@ router.post("/createUser", async (req, res) => {
 })
 
 
-router.delete("/deleteUser", (req, res) => {
-  users.destroy({where: {id: req.body.id}})
+router.delete("/:id", (req, res) => {
+  users.destroy({where: {id: req.params.id}})
     .then(() => {
       return res.status(200).json({
           error: false,

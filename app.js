@@ -2,9 +2,10 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 
-const estoque = require('./router/estoque')
-const agenda = require('./router/agenda')
+const invetory = require('./router/invetory')
+const agenda = require('./router/schedule')
 const users = require('./router/users')
+const clients = require('./router/clients')
 const login = require('./config_user/login')
 
 const cors = require('cors')
@@ -18,7 +19,8 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use('/estoque', estoque, auth)
+app.use('/clientes', clients, auth)
+app.use('/estoque', invetory, auth)
 app.use('/agenda', agenda, auth)
 app.use('/users', users, auth)
 app.use('/login', login)

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const agenda = require('../bd/agenda')
+const agenda = require('../bd/schedule')
 
 router.post("/horario", (req, res) => {
   agenda.create(req.body).then(response => {
@@ -17,8 +17,8 @@ router.post("/horario", (req, res) => {
 })
 
 
-router.put("/horario", (req, res) => {
-  agenda.update( req.body, { where: { id: req.body.id}} )
+router.put("/horario/:id", (req, res) => {
+  agenda.update( req.body, { where: { id: req.params.id}} )
   .then(() => {
     return res.status(200).json({
       error: false,
@@ -33,8 +33,8 @@ router.put("/horario", (req, res) => {
 })
 
 
-router.delete("/horario", (req, res) => {
-  agenda.destroy({where: {id: req.body.id}})
+router.delete("/horario/:id", (req, res) => {
+  agenda.destroy({where: {id: req.params.id}})
     .then(() => {
       return res.status(200).json({
         error: false,
@@ -48,25 +48,41 @@ router.delete("/horario", (req, res) => {
   })
 })
 
-router.get("/", (req, res) => {
-  agenda.findAndCountAll({ 
-    offset: req.body.page,
-    limit: req.body.length,
+router.get("/horario", async (req, res) => {
+  const {page, size} = req.query
+
+  agenda.findAndCountAll({     
     order: [['data','DESC'],['horario','DESC']],
+    offset: parseInt(page),
+    limit: parseInt(size),
   })
   .then((horarios) => {
     return res.json({
-      page: req.body.page,
-      rows: req.body.length,
       data: horarios,
     })
   })
-  .catch(() => {
+  .catch(err => {
+    return res.status(400).json({
+      error: true,
+      message: "Busca não realizada!",
+      err
+    })
+  })
+})
+
+router.get("/horario/:id", (req, res) => {
+  agenda.findOne({where: {id: req.params.id}})
+  .then((horarios) => {
+    return res.json({data:horarios})
+  })
+  .catch(err => {
+    console.log(err)
     return res.status(400).json({
       error: true,
       message: "Busca não realizada!"
     })
   })
 })
+
 
 module.exports = router

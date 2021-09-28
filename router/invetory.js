@@ -1,10 +1,25 @@
-const express = require('express');
+const express = require('express')
 const router = express.Router()
-const estoque = require('../bd/estoque')
+const estoque = require('../bd/inventory')
 const app = express()
 
 router.get("/", (req, res) => {
-  estoque.findAndCountAll({})
+  estoque.findAndCountAll({
+    offset: parseInt(req.query.page),
+    limit: parseInt(req.query.size)
+  })
+  .then((estoque) => {
+    return res.json(estoque)
+  }).catch(() => {
+    return res.status(400).json({
+      error: true,
+      message: "Busca não realizada!"
+    })
+  })
+})
+
+router.get("/:id", (req, res) => {
+  estoque.findOne({where: {id: req.params.id}})
   .then((estoque) => {
     return res.json(estoque)
   }).catch(() => {
@@ -30,8 +45,8 @@ router.post("/material", (req, res) => {
 })
 
 
-router.put("/material", (req, res) => {
-  estoque.update( req.body, { where: { id: req.body.id}} )
+router.put("/material/:id", (req, res) => {
+  estoque.update( req.body, { where: { id: req.params.id}} )
   .then(() => {
       return res.status(200).json({
         error: false,
@@ -45,8 +60,8 @@ router.put("/material", (req, res) => {
 })
 
 
-router.delete("/material", (req, res) => {
-  estoque.destroy({where: {id: req.body.id}})
+router.delete("/material/:id", (req, res) => {
+  estoque.destroy({where: {id: req.params.id}})
     .then(() => {
       return res.status(200).json({
         error: false,
