@@ -30,4 +30,4 @@
 
 <h3>Rotas e method's</h3>
 
-- Importar arquivo de collections no Insomnia: studio_moreiras_routes 
+- Importar no Insomnia, o arquivo de collections "studio_moreiras" que se encontra na raiz do projeto.
