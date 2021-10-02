@@ -26,14 +26,8 @@
 
 <p>- No arquivo conect, deve ser costumizado para dados do local, criar o banco com nome "estoque" para ser conectado;</p>
 
-<p>- Para criação da tabela, pode ser feito manualmente, para ser criado automaticamente, deve colocar no arquivo  estoque.sync({force: true}), após criar, tirar o force;</p> <br>
+<p>- Para criação da tabela, pode ser feito manualmente, para ser criado automaticamente, deve colocar ({force: true}) em todos os syncs das tabelas, após criar, tirar o force;</p> <br>
 
 <h3>Rotas e method's</h3>
 
-<p>- Post "/inserirMaterial" - Método post para inserir no banco o comentario com os seguintes campos: material, quantidade, valor e data, com o campo material sendo type String e os outros campos numbers; </p>
-
-<p>- Get "/estoque" - Método get para retornar todos os registros que estão inseridos no banco; </p>
-
-<p>- Put "/alterarMaterial" - Método put para editar um registro, usando o parametro _id para editar o conteudo dos campos desejados no body; </p>
-
-<p>- Delete "/deletarMaterial" - Método delete para deletar um material, enviando o parametro Id; </p>
+- Importar arquivo de collections no Insomnia: studio_moreiras_routes 
